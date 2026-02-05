@@ -5,6 +5,52 @@ document.addEventListener('DOMContentLoaded', () => {
   const luckyColorTableBody = document.querySelector('#lucky-color-table tbody');
   const quoteContainer = document.getElementById('quote-of-the-day');
   const quoteText = document.getElementById('quote-text');
+  const themeToggleButton = document.getElementById('theme-toggle');
+  const lightIcon = document.getElementById('theme-toggle-light-icon');
+  const darkIcon = document.getElementById('theme-toggle-dark-icon');
+
+  // Theme toggle logic
+  if (
+    localStorage.getItem('color-theme') === 'dark' ||
+    (!('color-theme' in localStorage) &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches)
+  ) {
+    document.documentElement.classList.add('dark');
+    lightIcon.classList.remove('hidden');
+    darkIcon.classList.add('hidden');
+  } else {
+    document.documentElement.classList.remove('dark');
+    lightIcon.classList.add('hidden');
+    darkIcon.classList.remove('hidden');
+  }
+
+  themeToggleButton.addEventListener('click', () => {
+    if (localStorage.getItem('color-theme')) {
+      if (localStorage.getItem('color-theme') === 'light') {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('color-theme', 'dark');
+        lightIcon.classList.remove('hidden');
+        darkIcon.classList.add('hidden');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('color-theme', 'light');
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      }
+    } else {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('color-theme', 'light');
+        lightIcon.classList.add('hidden');
+        darkIcon.classList.remove('hidden');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('color-theme', 'dark');
+        lightIcon.classList.remove('hidden');
+        darkIcon.classList.add('hidden');
+      }
+    }
+  });
 
   const today = new Date();
   currentDateElement.textContent = today.toDateString();
