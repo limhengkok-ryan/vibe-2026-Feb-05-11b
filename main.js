@@ -109,6 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
     "Violet": "Purple",
   };
 
+  const colorNameToHex = {
+    "Charcoal": "#36454F",
+    "Emerald": "#50C878",
+    "Lilac": "#C8A2C8",
+  };
+
   const quotes = [
     "The best way to predict the future is to create it.",
     "Your limitation is only your imagination.",
@@ -159,8 +165,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function spin() {
         const randomColor = allColors[Math.floor(Math.random() * allColors.length)];
+        const bgColor = colorNameToHex[randomColor] || randomColor;
         cell.textContent = randomColor;
-        cell.style.backgroundColor = randomColor;
+        cell.style.backgroundColor = bgColor;
         cell.style.color = darkColors.includes(randomColor) ? 'white' : 'black';
 
         const elapsed = Date.now() - startTime;
@@ -170,8 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
             interval *= 1.2;
             timeoutId = setTimeout(spin, interval);
         } else {
+            const finalBgColor = colorNameToHex[finalColor] || finalColor;
             cell.textContent = finalColor;
-            cell.style.backgroundColor = finalColor;
+            cell.style.backgroundColor = finalBgColor;
             cell.style.color = darkColors.includes(finalColor) ? 'white' : 'black';
 
             if (isLastAnimation) {
