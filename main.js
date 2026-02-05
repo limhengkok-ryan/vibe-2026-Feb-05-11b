@@ -8,6 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const themeToggleButton = document.getElementById('theme-toggle');
   const lightIcon = document.getElementById('theme-toggle-light-icon');
   const darkIcon = document.getElementById('theme-toggle-dark-icon');
+  const genderButtons = document.querySelectorAll('.gender-button');
+  const modelPhotoContainer = document.getElementById('model-photo-container');
+  const modelPhoto = document.getElementById('model-photo');
+  const suggestedClothingHeader = document.getElementById('suggested-clothing-header');
+
+  let selectedGender = null;
+  const UNSPLASH_API_KEY = 'mEblEuTARfBqgEtkOCrGD_ggoi-MDCSsyjB1Gzm2MPU';
 
   // Theme toggle logic
   if (
@@ -52,6 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  genderButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        genderButtons.forEach(btn => {
+            btn.classList.remove('bg-blue-500', 'text-white');
+            btn.classList.add('border', 'dark:text-white', 'border-gray-300', 'dark:border-gray-600');
+        });
+        
+        button.classList.add('bg-blue-500', 'text-white');
+        button.classList.remove('border', 'dark:text-white', 'border-gray-300', 'dark:border-gray-600');
+        selectedGender = button.dataset.gender;
+    });
+  });
+
   const today = new Date();
   currentDateElement.textContent = today.toDateString();
 
@@ -70,6 +90,25 @@ document.addEventListener('DOMContentLoaded', () => {
     pisces: { primary: "SeaGreen", secondary: ["Lilac", "Violet"] },
   };
 
+  const colorSearchMap = {
+    "Coral": "Orange",
+    "HotPink": "Pink",
+    "Emerald": "Green",
+    "LightBlue": "Blue",
+    "Silver": "Grey",
+    "SeaGreen": "Green",
+    "Navy": "Blue",
+    "Lavender": "Purple",
+    "Maroon": "Red",
+    "DarkBlue": "Blue",
+    "Plum": "Purple",
+    "Charcoal": "Grey",
+    "Turquoise": "Blue",
+    "Aquamarine": "Blue",
+    "Lilac": "Purple",
+    "Violet": "Purple",
+  };
+
   const quotes = [
     "The best way to predict the future is to create it.",
     "Your limitation is only your imagination.",
@@ -85,9 +124,35 @@ document.addEventListener('DOMContentLoaded', () => {
   horoscopeSelect.addEventListener('change', () => {
     luckyColorTableBody.innerHTML = '';
     quoteContainer.style.display = 'none';
+    modelPhotoContainer.style.display = 'none';
   });
 
-  const animate = (cell, finalColor, duration) => {
+  const fetchModelPhoto = async (gender, primaryColor, secondaryColor) => {
+    const searchPrimaryColor = colorSearchMap[primaryColor] || primaryColor;
+    const searchSecondaryColor = colorSearchMap[secondaryColor] || secondaryColor;
+    const query = `${gender} model wearing ${searchPrimaryColor} and ${searchSecondaryColor} clothes`;
+    const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&client_id=${UNSPLASH_API_KEY}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.results && data.results.length > 0) {
+        modelPhoto.src = data.results[0].urls.regular;
+        modelPhotoContainer.style.display = 'block';
+        suggestedClothingHeader.style.display = 'block';
+      } else {
+        modelPhotoContainer.style.display = 'none';
+        suggestedClothingHeader.style.display = 'none';
+        console.warn('No images found for the query:', query);
+      }
+    } catch (error) {
+      console.error('Error fetching image from Unsplash:', error);
+      modelPhotoContainer.style.display = 'none';
+      suggestedClothingHeader.style.display = 'none';
+    }
+  };
+
+  const animate = (cell, finalColor, duration, isLastAnimation, primaryColor, secondaryColor) => {
     const startTime = Date.now();
     let interval = 50;
     let timeoutId;
@@ -108,9 +173,16 @@ document.addEventListener('DOMContentLoaded', () => {
             cell.textContent = finalColor;
             cell.style.backgroundColor = finalColor;
             cell.style.color = darkColors.includes(finalColor) ? 'white' : 'black';
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            quoteText.textContent = `"${randomQuote}"`;
-            quoteContainer.style.display = 'block';
+
+            if (isLastAnimation) {
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                quoteText.textContent = `"${randomQuote}"`;
+                quoteContainer.style.display = 'block';
+
+                if (selectedGender) {
+                    fetchModelPhoto(selectedGender, primaryColor, secondaryColor);
+                }
+            }
         }
     }
 
@@ -121,6 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const startAnimation = (primaryColor, secondaryColor) => {
     luckyColorTableBody.innerHTML = '';
     quoteContainer.style.display = 'none';
+    modelPhotoContainer.style.display = 'none';
+    suggestedClothingHeader.style.display = 'none';
     const primaryRow = document.createElement('tr');
     const primaryLabelCell = document.createElement('td');
     const primaryColorCell = document.createElement('td');
@@ -142,12 +216,16 @@ document.addEventListener('DOMContentLoaded', () => {
     luckyColorTableBody.appendChild(primaryRow);
     luckyColorTableBody.appendChild(secondaryRow);
 
-    animate(primaryColorCell, primaryColor, 1500);
-    animate(secondaryColorCell, secondaryColor, 2200);
+    animate(primaryColorCell, primaryColor, 1500, false);
+    animate(secondaryColorCell, secondaryColor, 2200, true, primaryColor, secondaryColor);
   };
 
   huatButton.addEventListener('click', () => {
     const selectedHoroscope = horoscopeSelect.value;
+    if (!selectedGender) {
+        alert('Please select a gender.');
+        return;
+    }
     if (selectedHoroscope) {
       const { primary, secondary } = luckyColors[selectedHoroscope];
       const randomSecondaryColor = secondary[Math.floor(Math.random() * secondary.length)];
