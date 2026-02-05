@@ -22,44 +22,74 @@ document.addEventListener('DOMContentLoaded', () => {
     pisces: { primary: "SeaGreen", secondary: ["Lilac", "Violet"] },
   };
 
+  const allColors = [...new Set(Object.values(luckyColors).flatMap(c => [c.primary, ...c.secondary]))];
+  const darkColors = ["Red", "Green", "Navy", "Black", "Maroon", "Purple", "DarkBlue", "Brown", "Charcoal"];
+
   horoscopeSelect.addEventListener('change', () => {
     luckyColorTableBody.innerHTML = '';
   });
+
+  const animate = (cell, finalColor, duration) => {
+    const startTime = Date.now();
+    let interval = 50;
+    let timeoutId;
+
+    function spin() {
+        const randomColor = allColors[Math.floor(Math.random() * allColors.length)];
+        cell.textContent = randomColor;
+        cell.style.backgroundColor = randomColor;
+        cell.style.color = darkColors.includes(randomColor) ? 'white' : 'black';
+
+        const elapsed = Date.now() - startTime;
+        if (elapsed < duration - 700) {
+            timeoutId = setTimeout(spin, interval);
+        } else if (elapsed < duration) {
+            interval *= 1.2;
+            timeoutId = setTimeout(spin, interval);
+        } else {
+            cell.textContent = finalColor;
+            cell.style.backgroundColor = finalColor;
+            cell.style.color = darkColors.includes(finalColor) ? 'white' : 'black';
+        }
+    }
+
+    spin();
+  };
+
+
+  const startAnimation = (primaryColor, secondaryColor) => {
+    luckyColorTableBody.innerHTML = '';
+    const primaryRow = document.createElement('tr');
+    const primaryLabelCell = document.createElement('td');
+    const primaryColorCell = document.createElement('td');
+    primaryLabelCell.textContent = 'Primary';
+    primaryLabelCell.className = 'py-3 pr-4 font-medium text-gray-600 text-right';
+    primaryColorCell.className = 'py-4 px-6 text-xl font-bold rounded-lg shadow-md';
+    primaryRow.appendChild(primaryLabelCell);
+    primaryRow.appendChild(primaryColorCell);
+
+    const secondaryRow = document.createElement('tr');
+    const secondaryLabelCell = document.createElement('td');
+    const secondaryColorCell = document.createElement('td');
+    secondaryLabelCell.textContent = 'Secondary';
+    secondaryLabelCell.className = 'py-3 pr-4 font-medium text-gray-600 text-right';
+    secondaryColorCell.className = 'py-4 px-6 text-xl font-bold rounded-lg shadow-md';
+    secondaryRow.appendChild(secondaryLabelCell);
+    secondaryRow.appendChild(secondaryColorCell);
+
+    luckyColorTableBody.appendChild(primaryRow);
+    luckyColorTableBody.appendChild(secondaryRow);
+
+    animate(primaryColorCell, primaryColor, 1500);
+    animate(secondaryColorCell, secondaryColor, 2200);
+  };
 
   huatButton.addEventListener('click', () => {
     const selectedHoroscope = horoscopeSelect.value;
     if (selectedHoroscope) {
       const { primary, secondary } = luckyColors[selectedHoroscope];
       const randomSecondaryColor = secondary[Math.floor(Math.random() * secondary.length)];
-
-      luckyColorTableBody.innerHTML = ''; // Clear previous results
-
-      const colors = [
-        { label: 'Primary', color: primary },
-        { label: 'Secondary', color: randomSecondaryColor }
-      ];
-
-      colors.forEach(item => {
-        const row = document.createElement('tr');
-        const labelCell = document.createElement('td');
-        const colorCell = document.createElement('td');
-
-        labelCell.textContent = item.label;
-        labelCell.className = 'py-3 pr-4 font-medium text-gray-600 text-right';
-
-        colorCell.textContent = item.color;
-        colorCell.style.backgroundColor = item.color;
-        colorCell.className = 'py-4 px-6 text-xl font-bold rounded-lg shadow-md';
-
-        const darkColors = ["Red", "Green", "Navy", "Black", "Maroon", "Purple", "DarkBlue", "Brown", "Charcoal"];
-        if (darkColors.includes(item.color)) {
-          colorCell.style.color = "white";
-        }
-
-        row.appendChild(labelCell);
-        row.appendChild(colorCell);
-        luckyColorTableBody.appendChild(row);
-      });
+      startAnimation(primary, randomSecondaryColor);
     }
   });
 });
