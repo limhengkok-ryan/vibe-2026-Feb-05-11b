@@ -3,14 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Toto Number Generator</title>
-  <link href='/style.css' rel='stylesheet'>
+  <title>Huat Generator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            righteous: ['Righteous', 'cursive'],
+          },
+        },
+      },
+    }
+  </script>
 </head>
-<body>
-  <h1>Toto Number Generator</h1>
-  <div class="container">
-    <div id="numbers-container" class="numbers-container"></div>
-    <button id="generate-btn">Generate Numbers</button>
+<body class="bg-gray-100 flex flex-col items-center pt-10 font-sans">
+  <h1 class="font-righteous text-blue-500 text-6xl mb-2">Huat Generator</h1>
+  <p id="current-date" class="text-lg text-gray-600 mb-8"></p>
+  <div class="flex gap-8">
+    <div class="action-panel bg-white p-10 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+      <div class="horoscope-container flex flex-col items-center gap-6">
+        <label for="horoscope-select" class="text-gray-700 font-medium">Choose your horoscope:</label>
+        <select id="horoscope-select" class="w-64 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+          <option value="">Select a horoscope</option>
+          <option value="aries">Aries (Mar 21 - Apr 19)</option>
+          <option value="taurus">Taurus (Apr 20 - May 20)</option>
+          <option value="gemini">Gemini (May 21 - Jun 20)</option>
+          <option value="cancer">Cancer (Jun 21 - Jul 22)</option>
+          <option value="leo">Leo (Jul 23 - Aug 22)</option>
+          <option value="virgo">Virgo (Aug 23 - Sep 22)</option>
+          <option value="libra">Libra (Sep 23 - Oct 22)</option>
+          <option value="scorpio">Scorpio (Oct 23 - Nov 21)</option>
+          <option value="sagittarius">Sagittarius (Nov 22 - Dec 21)</option>
+          <option value="capricorn">Capricorn (Dec 22 - Jan 19)</option>
+          <option value="aquarius">Aquarius (Jan 20 - Feb 18)</option>
+          <option value="pisces">Pisces (Feb 19 - Mar 20)</option>
+        </select>
+        <button id="huat-button" class="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg transition-all duration-300 uppercase tracking-wider">Huat Now!</button>
+      </div>
+    </div>
+    <div class="result-panel bg-white p-10 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex items-center justify-center min-w-[20rem]">
+        <table id="lucky-color-table" class="w-full">
+            <tbody class="text-center">
+            </tbody>
+        </table>
+    </div>
   </div>
   <script defer type="text/javascript" src="/main.js"></script>
 </body>
