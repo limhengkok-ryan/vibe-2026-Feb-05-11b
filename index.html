@@ -20,14 +20,14 @@
     }
   </script>
 </head>
-<body class="bg-gray-100 flex flex-col items-center pt-10 font-sans">
-  <h1 class="font-righteous text-blue-500 text-6xl mb-2">Huat Generator</h1>
+<body class="bg-gray-100 flex flex-col items-center pt-8 md:pt-10 font-sans">
+  <h1 class="font-righteous text-blue-500 text-5xl md:text-6xl mb-2 text-center">Huat Generator</h1>
   <p id="current-date" class="text-lg text-gray-600 mb-8"></p>
-  <div class="flex gap-8">
-    <div class="action-panel bg-white p-10 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300">
+  <div class="flex flex-col md:flex-row gap-8 w-full max-w-4xl px-4 md:px-0">
+    <div class="action-panel bg-white p-6 md:p-10 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex-1">
       <div class="horoscope-container flex flex-col items-center gap-6">
-        <label for="horoscope-select" class="text-gray-700 font-medium">Choose your horoscope:</label>
-        <select id="horoscope-select" class="w-64 p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none">
+        <label for="horoscope-select" class="text-gray-700 font-medium text-lg">Choose your horoscope:</label>
+        <select id="horoscope-select" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none text-lg">
           <option value="">Select a horoscope</option>
           <option value="aries">Aries (Mar 21 - Apr 19)</option>
           <option value="taurus">Taurus (Apr 20 - May 20)</option>
@@ -42,10 +42,10 @@
           <option value="aquarius">Aquarius (Jan 20 - Feb 18)</option>
           <option value="pisces">Pisces (Feb 19 - Mar 20)</option>
         </select>
-        <button id="huat-button" class="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg transition-all duration-300 uppercase tracking-wider">Huat Now!</button>
+        <button id="huat-button" class="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg transition-all duration-300 uppercase tracking-wider text-lg">Huat Now!</button>
       </div>
     </div>
-    <div class="result-panel bg-white p-10 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex items-center justify-center min-w-[20rem]">
+    <div class="result-panel bg-white p-6 md:p-10 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex-1 flex items-center justify-center">
         <table id="lucky-color-table" class="w-full">
             <tbody class="text-center">
             </tbody>
