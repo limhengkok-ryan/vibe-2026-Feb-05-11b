@@ -45,11 +45,14 @@
         <button id="huat-button" class="w-full bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-md hover:bg-blue-600 hover:shadow-lg transition-all duration-300 uppercase tracking-wider text-lg">Huat Now!</button>
       </div>
     </div>
-    <div class="result-panel bg-white p-6 md:p-10 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex-1 flex items-center justify-center">
+    <div class="result-panel bg-white p-6 md:p-10 rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex-1 flex flex-col items-center justify-center">
         <table id="lucky-color-table" class="w-full border-separate border-spacing-y-4">
             <tbody class="text-center">
             </tbody>
         </table>
+        <div id="quote-of-the-day" class="mt-8 text-center" style="display: none;">
+            <p id="quote-text" class="text-lg italic text-gray-600"></p>
+        </div>
     </div>
   </div>
   <script defer type="text/javascript" src="/main.js"></script>
